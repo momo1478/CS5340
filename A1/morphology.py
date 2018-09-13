@@ -18,7 +18,7 @@ def analyze(word, originPOS, derivedPOS):
         # Match POS in dictionary
         valid = False
         for entry in dictionary[word]:
-            if(originPOS == entry[0]):
+            if( originPOS == entry or (len(dictionary[word]) > 1 and originPOS == entry[0])):
                 valid = True
 
         return [word,derivedPOS,root,source] if valid else None
@@ -67,7 +67,7 @@ def analyzeWord(word):
         if(all(result is None for result in results)):
             return [word,"noun",word,"default"]
         else:
-            return results
+            return filter(None,results)
  
     # if(word in dictionary or word in roots):
     #     if(word in roots):
@@ -123,14 +123,12 @@ with open(sys.argv[3],'r') as f:
 
 for word in tests:
     results = analyzeWord(word)
-    print(results)
-    # if(isinstance(results[0],list) == False):
-    #     form = "{0: <15} {1: <15} ROOT={2: <15} SOURCE={3: <15}"
-    #     print(form.format(word,results[1],results[2],results[3]))
-    # else:
-    #     for result in results:
-    #         form = "{0: <15} {1: <15} ROOT={2: <15} SOURCE={3: <15}"
-    #         print(form.format(word,results[1],results[2],results[3]))
+    # print(results)
+    if(isinstance(results[0],list) == False):
+        print(word + " " + results[1] + " ROOT=" + results[2] + " SOURCE=" + results[3] )
+    else:
+        for result in results:
+            print(word + " " + result[1] + " ROOT=" + result[2] + " SOURCE=" + result[3] )
 
     print("")
     
