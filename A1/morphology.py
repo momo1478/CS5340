@@ -1,4 +1,5 @@
 import sys
+import itertools
 from collections import defaultdict
 
 dictionary = defaultdict(list) # word -> [(POS , ?Root)]
@@ -20,6 +21,7 @@ def analyze(word, originPOS, derivedPOS):
         for entry in dictionary[word]:
             if( originPOS == entry or (len(dictionary[word]) > 1 and originPOS == entry[0])):
                 valid = True
+                break
 
         return [word,derivedPOS,root,source] if valid else None
     else:
@@ -29,13 +31,13 @@ def analyze(word, originPOS, derivedPOS):
                     newWord = word[len(rule[1]):]
                     if(rule[2] != "-"):
                         newWord = rule[2] + newWord
-                    return analyze(newWord,rule[3],rule[4])
+                    return analyze(newWord,rule[3],derivedPOS) if originPOS == rule[4] else None
             else:
                 if(word.endswith(rule[1])):
                     newWord = word[:-len(rule[1])]
                     if(rule[2] != "-"):
                         newWord = newWord + rule[2]
-                    return analyze(newWord,rule[3],rule[4])
+                    return analyze(newWord,rule[3],derivedPOS) if originPOS == rule[4] else None
     
 def analyzeWord(word):
     if(word in dictionary):
@@ -67,41 +69,8 @@ def analyzeWord(word):
         if(all(result is None for result in results)):
             return [word,"noun",word,"default"]
         else:
-            return filter(None,results)
- 
-    # if(word in dictionary or word in roots):
-    #     if(word in roots):
-    #         POS = rootPOS[word]
-    #         word = roots[word]
-    #         firstCall = False
-    #     else:
-    #         POS = dictionary[word]
-    #     source = ("dictionary" if firstCall else "morphology")
-    #     return [word,dictionary[word],word,source]
-    # else:
-    #     results = []
-    #     for rule in rules:
-    #         if(rule[0] == "PREFIX"):
-    #             if(word.startswith(rule[1])):
-    #                 newWord = word[len(rule[1]):]
-    #                 if(rule[2] != "-"):
-    #                     newWord = rule[2] + newWord
-    #                 results.append(analyze(newWord, False, rule[4]))
-    #         else:
-    #             if(word.endswith(rule[1])):
-    #                 newWord = word[:-len(rule[1])]
-    #                 if(rule[2] != "-"):
-    #                     newWord = newWord + rule[2]
-    #                 results.append(analyze(newWord, False, rule[4]))
-    #     print(results)
-    #     if(all(result is None for result in results) and firstCall):
-    #         # No rules apply
-    #         source = "default"
-    #         return [word, "noun", word, source]
-    #     if(any(result is not None for result in results)):
-    #         newRes = filter(None, results)
-    #         return newRes
-    #     return None
+            res = list(filter(None,results))
+            return list(res for res,_ in itertools.groupby(res))
 
 with open(sys.argv[1],'r') as f:
     for line in f:
@@ -122,8 +91,8 @@ with open(sys.argv[3],'r') as f:
         tests.append(line.strip())
 
 for word in tests:
+    word = word.lower()
     results = analyzeWord(word)
-    # print(results)
     if(isinstance(results[0],list) == False):
         print(word + " " + results[1] + " ROOT=" + results[2] + " SOURCE=" + results[3] )
     else:
