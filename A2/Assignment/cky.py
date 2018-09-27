@@ -69,13 +69,15 @@ def CKY(sentence):
 				colConst = getAllInColumn(board, s,c)
 				fullRowConst = getAllInRowFull(board,r,s)
 				fullColConst = getAllInColumnFull(board,s,c)
-				print("fullRowConst = " + str(fullRowConst))
-				print("fullColConst = " + str(fullColConst))
 				allConstPairs = [(x, y) for x in rowConst for y in colConst]
+				fullAllConstPairs = [(x, y) for x in fullRowConst for y in fullColConst]
+				#print("fullRowConst = " + str(fullRowConst))
+				#print("fullColConst = " + str(fullColConst))
 				#print("Processing : " + str((r,s)))
 				#print("rowConst = " + str(rowConst))
 				#print("colConst = " + str(colConst))
 				#print("allConstPairs = " + str(allConstPairs))
+				#print("fullallConstPairs = " + str(fullAllConstPairs))
 				for pairs in allConstPairs:
 					ruleToSearchFor = ' '.join(pairs)
 					grammarToAdd = grammar.get(ruleToSearchFor)
@@ -83,6 +85,18 @@ def CKY(sentence):
 						board[c][r] = board[c][r] + grammarToAdd
 				if(len(board[c][r]) == 0):
 					 board[c][r] = board[c][r] + "-"
+				
+				for fullPair in fullAllConstPairs:
+					ruleToSearchFor = ' '.join([fullPair[0][0],fullPair[1][0]])
+					grammarToAdd = grammar.get(ruleToSearchFor)
+					if(grammarToAdd != None):
+						wordToAdd = fullPair[0][1] + " " + fullPair[1][1]
+						probToAdd = fullPair[0][2] * fullPair[1][2] * probs[(ruleToSearchFor,grammarToAdd[0])]
+						fullGrammarToAdd = (grammarToAdd[0], wordToAdd , probToAdd )
+						
+						fullBoard[c][r].append( fullGrammarToAdd )
+				if(len(fullBoard[c][r]) == 0):
+					 fullBoard[c][r].append( ("-","-","-") )
 	
 	print("Sentence : " + str(sentence))
 	print(fullBoard)
@@ -107,8 +121,8 @@ with open(sys.argv[2],'r') as f:
         fullBoard = [[[] for x in range(y + 1)] for y in range(len(sp))]
         CKY(sp)
 
-print("Grammar")
-print(grammar)
+#print("Grammar")
+#print(grammar)
 # print("Probs")
 # print(probs)
 # print("Words")
