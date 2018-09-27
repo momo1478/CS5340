@@ -22,16 +22,19 @@ def getAllInRow(board,r,c):
 		res = list(res).remove("-")
 	except ValueError:
 		pass
-	return list(res)
+	return list(res) if res != None else []
 
 def getAllInRowFull(board,r,c):
 	res = []
 	for x in xrange(c):
 		for item in fullBoard[x]:
-			res = res + item
+			res.append(item)
 	res = [e for e in res if e[0] != "-"]
-	
-	return list(set(res))
+	res = [x for x in res if x != []]
+	if(isinstance(res[0],list)):
+		return list(set(res[0]))
+	else:
+		return list(set(res))
 
 def getAllInColumn(board,r,c):
 	res = Set()
@@ -41,16 +44,18 @@ def getAllInColumn(board,r,c):
 		res = list(res).remove("-")
 	except ValueError:
 		pass
-	return list(res)
+	return list(res) if res != None else []
 
 def getAllInColumnFull(board,r,c):
 	res = []
 	for item in fullBoard[r]:
-		res = res + item
-	
-	res = [e for e in res if e[0] != "-"]
-
-	return list(set(res))
+		res.append(item)
+	res = [e for e in res if len(e) > 0 and e[0] != "-"]
+	res = [x for x in res if x != []]
+	if(res != [] and isinstance(res[0],list)):
+		return list(set(res[0]))
+	else:
+		return list(set(res))
 		
 def CKY(sentence):
 	for c in xrange(len(sentence)):
@@ -61,7 +66,7 @@ def CKY(sentence):
 				fullBoard[c][c].append( (pos,sentence[c],probs[(sentence[c],''.join(pos))]) )
 		else:
 			board[c][c] = "-"
-			fullBoard[c][c] = ("-","-","-")
+			fullBoard[c][c] = []
 
 		for r in xrange(c - 1,-1,-1):
 			for s in xrange(r + 1, c + 1):
@@ -84,7 +89,7 @@ def CKY(sentence):
 					if(grammarToAdd != None):
 						board[c][r] = board[c][r] + grammarToAdd
 				if(len(board[c][r]) == 0):
-					 board[c][r] = board[c][r] + "-"
+					 board[c][r] = board[c][r] + list("-")
 				
 				for fullPair in fullAllConstPairs:
 					ruleToSearchFor = ' '.join([fullPair[0][0],fullPair[1][0]])
@@ -98,6 +103,8 @@ def CKY(sentence):
 				if(len(fullBoard[c][r]) == 0):
 					 fullBoard[c][r].append( ("-","-","-") )
 	
+	for item in fullBoard[c]:
+		pass
 	print("Sentence : " + str(sentence))
 	print(fullBoard)
 
@@ -121,8 +128,8 @@ with open(sys.argv[2],'r') as f:
         fullBoard = [[[] for x in range(y + 1)] for y in range(len(sp))]
         CKY(sp)
 
-#print("Grammar")
-#print(grammar)
+# print("Grammar")
+# print(grammar)
 # print("Probs")
 # print(probs)
 # print("Words")
