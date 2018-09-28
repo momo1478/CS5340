@@ -132,11 +132,19 @@ def CKY(sentence):
 		for row in xrange(len(fullBoard)):
 			for col in xrange(len(fullBoard[row])):
 				if( any("S" in x[0] for x in fullBoard[row][col]) ):
-					print("cell[" + str(col + 1) + "," + str(row + 1) + "]: " + "S" + "(" + ("%0.4f" % round(maxSProb[row],4)) + ")")
+					try:
+						stat = ("%0.4f" % round(maxSProb[row],4))
+					except:
+						stat = "-"
+					print("cell[" + str(col + 1) + "," + str(row + 1) + "]: " + "S" + "(" + stat + ")")
 				else:
 					join = ""
 					for tup in fullBoard[row][col]:
-						join += tup[0] + "(" + ("%0.4f" % round(tup[2],4)) + ") "
+						try:
+							stat = ("%0.4f" % round(tup[2],4))
+						except:
+							stat = "-"
+						join += tup[0] + "(" + stat + ") "
 					print("cell[" + str(col + 1) + "," + str(row + 1) + "]: " + join)
 	else:
 		print("PARSING SENTENCE: " + str(allSentences[0][1]))
