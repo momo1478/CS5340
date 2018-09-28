@@ -121,21 +121,23 @@ def CKY(sentence):
 				SCount+=1
 				currentMaxSProb = maxSProb.get(col) 
 				if currentMaxSProb == None or currentMaxSProb < item[1]:
-					maxSProb[col] = item[1]
+					maxSProb[col] = item[2]
 	if not allSentences:
 		allSentences.append(("","",""))
 
 	if(prob):
 		print("PARSING SENTENCE: " + str(allSentences[0][1]))
-		print("NUMBER OF PARSES FOUND: " + len(maxSProb.keys))
+		print("NUMBER OF PARSES FOUND: " + str(len(maxSProb)))
 		print("TABLE:")
-		for col in xrange(len(fullBoard)):
-			for row in xrange(col):
-				print("Col is " + col)
-				if(tup[0] == "S"):
-					print("cell[" + str(row + 1) + "," + str(col + 1) + "]: " + tup[0] + "(" + str(maxSProb[col]) + ")")
+		for row in xrange(len(fullBoard)):
+			for col in xrange(len(fullBoard[row])):
+				if( any("S" in x[0] for x in fullBoard[row][col]) ):
+					print("cell[" + str(col + 1) + "," + str(row + 1) + "]: " + "S" + "(" + ("%0.4f" % round(maxSProb[row],4)) + ")")
 				else:
-					print("cell[" + str(row + 1) + "," + str(col + 1) + "]: " + tup[0] + "(" + str(item[1]) + ")")
+					join = ""
+					for tup in fullBoard[row][col]:
+						join += tup[0] + "(" + ("%0.4f" % round(tup[2],4)) + ") "
+					print("cell[" + str(col + 1) + "," + str(row + 1) + "]: " + join)
 	else:
 		print("PARSING SENTENCE: " + str(allSentences[0][1]))
 		print("NUMBER OF PARSES FOUND: " + str(SCount))
