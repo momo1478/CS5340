@@ -103,11 +103,31 @@ def CKY(sentence):
 				if(len(fullBoard[c][r]) == 0):
 					 fullBoard[c][r].append( ("-","-","-") )
 	
-	for item in fullBoard[c]:
-		pass
+	for c in xrange(len(sentence)):
+		for item in fullBoard[c]:
+			print("item is " + str(item))
 	print("Sentence : " + str(sentence))
 	print(fullBoard)
+	print(board)
 
+	allSentences = []
+	SCount = 0
+	for col in xrange(len(fullBoard)):
+		for item in fullBoard[col][0]:
+			if(item[0] == "S"):
+				allSentences.append(item)
+				SCount+=1
+	if not allSentences:
+		allSentences.append(("","",""))
+
+	print("PARSING SENTENCE: " + str(allSentences[0][1]))
+	print("NUMBER OF PARSES FOUND: " + SCount)
+
+	for target_list in expression_list:
+		pass
+	
+
+			
 prob = len(sys.argv) == 4 and sys.argv[3] == "-prob"
 
 with open(sys.argv[1],'r') as f:
