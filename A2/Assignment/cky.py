@@ -10,6 +10,7 @@ grammar = defaultdict(list)
 words = defaultdict(list)
 
 probs = {}
+prob = False
 
 #Row = board[x][0]
 #Col = board[x]
@@ -103,32 +104,47 @@ def CKY(sentence):
 				if(len(fullBoard[c][r]) == 0):
 					 fullBoard[c][r].append( ("-","-","-") )
 	
-	for c in xrange(len(sentence)):
-		for item in fullBoard[c]:
-			print("item is " + str(item))
-	print("Sentence : " + str(sentence))
-	print(fullBoard)
-	print(board)
+	# for c in xrange(len(sentence)):
+	# 	for item in fullBoard[c]:
+	# 		print("item is " + str(item))
+	#print("Sentence : " + str(sentence))
+	#print(fullBoard)
+	#print(board)
 
 	allSentences = []
+	maxSProb = {}
 	SCount = 0
 	for col in xrange(len(fullBoard)):
 		for item in fullBoard[col][0]:
 			if(item[0] == "S"):
 				allSentences.append(item)
 				SCount+=1
+				currentMaxSProb = maxSProb.get(col) 
+				if currentMaxSProb == None or currentMaxSProb < item[1]:
+					maxSProb[col] = item[1]
 	if not allSentences:
 		allSentences.append(("","",""))
 
-	print("PARSING SENTENCE: " + str(allSentences[0][1]))
-	print("NUMBER OF PARSES FOUND: " + SCount)
-
-	for target_list in expression_list:
-		pass
-	
-
-			
-prob = len(sys.argv) == 4 and sys.argv[3] == "-prob"
+	if(prob):
+		print("PARSING SENTENCE: " + str(allSentences[0][1]))
+		print("NUMBER OF PARSES FOUND: " + len(maxSProb.keys))
+		print("TABLE:")
+		for col in xrange(len(fullBoard)):
+			for row in xrange(col):
+				print("Col is " + col)
+				if(tup[0] == "S"):
+					print("cell[" + str(row + 1) + "," + str(col + 1) + "]: " + tup[0] + "(" + str(maxSProb[col]) + ")")
+				else:
+					print("cell[" + str(row + 1) + "," + str(col + 1) + "]: " + tup[0] + "(" + str(item[1]) + ")")
+	else:
+		print("PARSING SENTENCE: " + str(allSentences[0][1]))
+		print("NUMBER OF PARSES FOUND: " + str(SCount))
+		print("TABLE:")
+		for row in xrange(len(fullBoard)):
+			for col in xrange(len(fullBoard[row])):
+				print("cell[" + str(col + 1) + "," + str(row + 1) + "]: " + ' '.join(x[0] for x in fullBoard[row][col]))
+						
+prob = (len(sys.argv) == 4 and sys.argv[3] == "-prob")
 
 with open(sys.argv[1],'r') as f:
     for line in f:
@@ -140,14 +156,14 @@ with open(sys.argv[1],'r') as f:
         probs[(partTwo,partOne)] = partThree
         if(len(sp) == 4):
         	words[sp[2]].append(sp[0])
-
+print("")
 with open(sys.argv[2],'r') as f:
-    for line in f:
-        sp = line.split()
-        board = [[[] for x in range(y + 1)] for y in range(len(sp))]
-        fullBoard = [[[] for x in range(y + 1)] for y in range(len(sp))]
-        CKY(sp)
-
+	for line in f:
+		sp = line.split()
+		board = [[[] for x in range(y + 1)] for y in range(len(sp))]
+		fullBoard = [[[] for x in range(y + 1)] for y in range(len(sp))]
+		CKY(sp)
+		print("")
 # print("Grammar")
 # print(grammar)
 # print("Probs")
