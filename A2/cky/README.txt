@@ -1,0 +1,1 @@
+Tested on lab2-6 machine, funky things happen when inputing words that aren't in the pcfg. I had some trouble with some data outputting due to time contraints, please do some checks on the internal representation of the board with cky2.sh Thanks!
