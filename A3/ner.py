@@ -13,6 +13,8 @@ spelling = OrderedDict()
 # { word : Rule}
 context = OrderedDict()
 
+finalList = []
+
 def printDict(d):
     print("* * * * *")
     for key, val in d.items():
@@ -24,6 +26,7 @@ def printTuples(t):
         print( "(" + str(tup[0]) + " , " + str(tup[1]) + ")" )
 
 def printList(l):
+    print("= = = = =")
     for e in l:
         print(e)
 
@@ -42,7 +45,7 @@ class Rule(object):
               self.freq == other.freq
               
    def __repr__(self):
-       return self.t + " " + "Contains("+self.word+") -> "+self.label+" (prob="+str(self.prob)+" ; freq="+str(self.freq)+") iter=" + str(self.iteration)
+       return self.t + " " + "Contains("+self.word+") -> "+self.label+" (prob="+("{0:.3f}".format(self.prob))+" ; freq="+str(self.freq)+")"
 
 with open(argv[1]) as f:
     for line in f:
@@ -55,27 +58,20 @@ with open(argv[1]) as f:
         spelling[word] = Rule(t,word,label,prob,freq,0)
 
 with open(argv[2]) as f:
-    while True:
-        contextLine = str(f.readline().strip('\n'))
-        NPLine      = str(f.readline().strip('\n'))
-        blankLine   = f.readline()
-        if not blankLine :
-            break
-        else:
-            trainingSet.append( (' '.join(NPLine.split(' ')[1:]) , ' '.join(contextLine.split(' ')[1:]) ) )
+    lines = f.readlines()
+    for i in range(0,len(lines),3):
+        contextLine = str(lines[i].strip('\n'))
+        NPLine      = str(lines[i+1].strip('\n'))
+        trainingSet.append( (' '.join(NPLine.split(' ')[1:]) , ' '.join(contextLine.split(' ')[1:]) ) )
 
 with open(argv[3]) as f:
-    while True:
-        contextLine = str(f.readline().strip('\n'))
-        NPLine      = str(f.readline().strip('\n'))
-        blankLine   = f.readline()
-        if not blankLine :
-            break
-        else:
-            testSet.append( (' '.join(NPLine.split(' ')[1:]) , ' '.join(contextLine.split(' ')[1:]) ) )
+    lines = f.readlines()
+    for i in range(len(lines) + 3,3):
+        contextLine = str(lines[i].strip('\n'))
+        NPLine      = str(lines[i+1].strip('\n'))
+        testSet.append( (' '.join(NPLine.split(' ')[1:]) , ' '.join(contextLine.split(' ')[1:]) ) )
 
 def bootstrapping():
-    
     for i in range(1,4):
         ### GENERATE CONTEXT RULES ###
         temp_instances = []
@@ -194,8 +190,13 @@ def bootstrapping():
                     spelling[rule.word] = rule
 
 bootstrapping()
-printDict(context)
-printDict(spelling)
+#printDict(context)
+#printDict(spelling)
+#printList(spelling.values())
+#printList(context.values())
+finalList = list(spelling.values())
+finalList.extend(context.values())
+printList(finalList)
 #printDict(trainingSet)
 #printDict(spelling)
 #printDict(testSet)
