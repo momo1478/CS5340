@@ -13,7 +13,10 @@ spelling = OrderedDict()
 # { word : Rule}
 context = OrderedDict()
 
+#Final list of rules
 finalList = []
+#Result of testSet applied to learned rules ((NP,C),label)
+result = []
 
 def printDict(d):
     print("* * * * *")
@@ -26,7 +29,6 @@ def printTuples(t):
         print( "(" + str(tup[0]) + " , " + str(tup[1]) + ")" )
 
 def printList(l):
-    print("= = = = =")
     for e in l:
         print(e)
 
@@ -208,26 +210,45 @@ def applyLearning():
                 temp_instances[(NP,C)] = rule
                 break
         
-    result = []
     for NP_C in testSet:
         if(NP_C in temp_instances):
             result.append( (NP_C,temp_instances[NP_C].label) )
         else:
             result.append( (NP_C,"NONE") )
-    
-    printList(result)
-    
 
-
-            
-
-
+def printTrace():
+    print("SEED DECISION LIST\n")
+    printList([rule for rule in finalList if (rule.t == "SPELLING" and rule.iteration == 0)])
+    print("\nITERATION #1: NEW CONTEXT RULES\n")
+    printList([rule for rule in finalList if (rule.t == "CONTEXT" and rule.iteration == 1)])
+    print("\nITERATION #1: NEW SPELLING RULES\n")
+    printList([rule for rule in finalList if (rule.t == "SPELLING" and rule.iteration == 1)])
+    print("\nITERATION #2 NEW CONTEXT RULES\n")
+    printList([rule for rule in finalList if (rule.t == "CONTEXT" and rule.iteration == 2)])
+    print("\nITERATION #2: NEW SPELLING RULES\n")
+    printList([rule for rule in finalList if (rule.t == "SPELLING" and rule.iteration == 2)])
+    print("\nITERATION #3: NEW CONTEXT RULES\n")
+    printList([rule for rule in finalList if (rule.t == "CONTEXT" and rule.iteration == 3)])
+    print("\nITERATION #3: NEW SPELLING RULES\n")
+    printList([rule for rule in finalList if (rule.t == "SPELLING" and rule.iteration == 3)])
+    print("\nFINAL DECISION LIST\n")
+    printList(finalList)
+    print("\nAPPLYING FINAL DECISION LIST TO TEST INSTANCES\n")
+    for NPC_L in result:
+        NP = NPC_L[0][0]
+        C  = NPC_L[0][1]
+        L  = NPC_L[1]
+        print("CONTEXT: " + C)
+        print("NP: " + NP)
+        print("CLASS: " + L)
+        print("")
 
 
 bootstrapping()
 finalList = list(spelling.values())
 finalList.extend(context.values())
 applyLearning()
+printTrace()
 #printList(finalList)
 #printDict(context)
 #printDict(spelling)
