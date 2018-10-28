@@ -223,7 +223,7 @@ def printTrace():
     printList([rule for rule in finalList if (rule.t == "CONTEXT" and rule.iteration == 1)])
     print("\nITERATION #1: NEW SPELLING RULES\n")
     printList([rule for rule in finalList if (rule.t == "SPELLING" and rule.iteration == 1)])
-    print("\nITERATION #2 NEW CONTEXT RULES\n")
+    print("\nITERATION #2: NEW CONTEXT RULES\n")
     printList([rule for rule in finalList if (rule.t == "CONTEXT" and rule.iteration == 2)])
     print("\nITERATION #2: NEW SPELLING RULES\n")
     printList([rule for rule in finalList if (rule.t == "SPELLING" and rule.iteration == 2)])
@@ -234,14 +234,15 @@ def printTrace():
     print("\nFINAL DECISION LIST\n")
     printList(finalList)
     print("\nAPPLYING FINAL DECISION LIST TO TEST INSTANCES\n")
-    for NPC_L in result:
-        NP = NPC_L[0][0]
-        C  = NPC_L[0][1]
-        L  = NPC_L[1]
+    for i in range(len(result)):
+        NP = result[i][0][0]
+        C  = result[i][0][1]
+        L  = result[i][1]
         print("CONTEXT: " + C)
         print("NP: " + NP)
         print("CLASS: " + L)
-        print("")
+        if(i < len(result) - 1):
+            print("")
 
 
 bootstrapping()

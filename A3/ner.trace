@@ -102,58 +102,58 @@ CONTEXT Contains(peace) -> LOCATION (prob=1.000 ; freq=6)
 
 APPLYING FINAL DECISION LIST TO TEST INSTANCES
 
-CONTEXT: division of 
-NP: Gleason Inc 
+CONTEXT: division of
+NP: Gleason Inc
 CLASS: ORGANIZATION
 
-CONTEXT: country of 
-NP: France 
+CONTEXT: country of
+NP: France
 CLASS: NONE
 
-CONTEXT: documentary on 
-NP: Morgan Stanley 
+CONTEXT: documentary on
+NP: Morgan Stanley
 CLASS: ORGANIZATION
 
-CONTEXT: basketball player 
-NP: Devin Booker 
+CONTEXT: basketball player
+NP: Devin Booker
 CLASS: PERSON
 
-CONTEXT: acquisition of 
-NP: McDonnell Douglas Helicopter company 
+CONTEXT: acquisition of
+NP: McDonnell Douglas Helicopter company
 CLASS: ORGANIZATION
 
-CONTEXT: branch of 
-NP: Lockheed Martin 
+CONTEXT: branch of
+NP: Lockheed Martin
 CLASS: ORGANIZATION
 
-CONTEXT: software manufacturer 
-NP: IBM 
+CONTEXT: software manufacturer
+NP: IBM
 CLASS: NONE
 
-CONTEXT: peace negotiator 
-NP: Yuri Fesenko 
+CONTEXT: peace negotiator
+NP: Yuri Fesenko
 CLASS: PERSON
 
-CONTEXT: merger with 
-NP: IBM 
+CONTEXT: merger with
+NP: IBM
 CLASS: ORGANIZATION
 
-CONTEXT: veterinary assistant 
+CONTEXT: veterinary assistant
 NP: Susan Stanley 
 CLASS: ORGANIZATION
 
-CONTEXT: chairman 
-NP: Walter Douglas 
+CONTEXT: chairman
+NP: Walter Douglas
 CLASS: PERSON
 
-CONTEXT: president 
-NP: William Johnson 
+CONTEXT: president
+NP: William Johnson
 CLASS: PERSON
 
-CONTEXT: stake president 
-NP: Vera Durbin 
+CONTEXT: stake president
+NP: Vera Durbin
 CLASS: PERSON
 
 CONTEXT: new acquisition 
-NP: Kansas Textiles Corporation 
+NP: Kansas Textiles Corporation
 CLASS: ORGANIZATION
