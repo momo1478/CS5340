@@ -66,10 +66,11 @@ with open(argv[2]) as f:
 
 with open(argv[3]) as f:
     lines = f.readlines()
-    for i in range(len(lines) + 3,3):
+    for i in range(0,len(lines),3):
         contextLine = str(lines[i].strip('\n'))
         NPLine      = str(lines[i+1].strip('\n'))
         testSet.append( (' '.join(NPLine.split(' ')[1:]) , ' '.join(contextLine.split(' ')[1:]) ) )
+        
 
 def bootstrapping():
     for i in range(1,4):
@@ -188,15 +189,50 @@ def bootstrapping():
                 labelCounts[rule.label] += 1
                 if (labelCounts[rule.label] < 3):
                     spelling[rule.word] = rule
+def applyLearning():
+    unlabled = list(testSet)
+    temp_instances = {}
+    for NP_C in testSet:
+        NP = NP_C[0]
+        C  = NP_C[1]
+        for rule in spelling.values():
+            if (rule.word in NP.split(' ')):
+                temp_instances[(NP,C)] = rule
+                unlabled.remove( (NP,C) )
+                break
+    for NP_C in unlabled:
+        NP = NP_C[0]
+        C  = NP_C[1]
+        for rule in context.values():
+            if (rule.word in C.split(' ')):
+                temp_instances[(NP,C)] = rule
+                break
+        
+    result = []
+    for NP_C in testSet:
+        if(NP_C in temp_instances):
+            result.append( (NP_C,temp_instances[NP_C].label) )
+        else:
+            result.append( (NP_C,"NONE") )
+    
+    printList(result)
+    
+
+
+            
+
+
+
 
 bootstrapping()
+finalList = list(spelling.values())
+finalList.extend(context.values())
+applyLearning()
+#printList(finalList)
 #printDict(context)
 #printDict(spelling)
 #printList(spelling.values())
 #printList(context.values())
-finalList = list(spelling.values())
-finalList.extend(context.values())
-printList(finalList)
 #printDict(trainingSet)
 #printDict(spelling)
 #printDict(testSet)
